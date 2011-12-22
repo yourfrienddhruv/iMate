@@ -39,6 +39,7 @@ import com.dstar.imate.remote.facade.RelationshipManagerFacade;
  * 		asadmin start-domain
  * Verify :
  * 		asadmin get configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.websockets-support-enabled
+ * 		asadmin get configs.config.server-config.network-config.protocols.protocol.http-listener-2.http.websockets-support-enabled
  *
  *
  */
