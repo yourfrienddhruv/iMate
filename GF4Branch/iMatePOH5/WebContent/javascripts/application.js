@@ -4,8 +4,8 @@ var name  = null;
 
 var app = {
 	websocket:null,
-    //url: 'ws://localhost:8080/RelationshipService',
-    url: 'wss://localhost:8181/RelationshipService',
+    url: 'ws://localhost:8080/RelationshipService',
+    //url: 'wss://localhost:8181/RelationshipService',
     initialize: function() {
         if ("WebSocket" in window || "MozWebSocket" in window) {
             $('login-name').focus();
