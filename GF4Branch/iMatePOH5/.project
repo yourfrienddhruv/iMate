@@ -33,4 +33,16 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>lib-bin</name>
+			<type>2</type>
+			<location>C:/Innovate/eclipseWorkspace/iMateGIT/GF4Branch/iMateRemoteClient/bin</location>
+		</link>
+		<link>
+			<name>lib-classes</name>
+			<type>2</type>
+			<location>C:/Innovate/eclipseWorkspace/iMateGIT/GF4Branch/iMateClient/build/classes</location>
+		</link>
+	</linkedResources>
 </projectDescription>

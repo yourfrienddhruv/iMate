@@ -12,7 +12,7 @@ public class StandaloneWebSocketServer {
     
     public static void runServer(String basePath,int port,WebSocketApplication... apps) throws Exception{
     	if(basePath==null){
-    		basePath="C:\\Innovate\\eclipseWorkspace\\iMateGIT\\HTML5Branch\\iMatePOH5\\WebContent";
+    		basePath="..\\..\\WebContent";
     	}
     	if(port <1){
     		port=9090;

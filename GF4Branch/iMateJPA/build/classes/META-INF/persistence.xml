@@ -5,6 +5,7 @@
 	<persistence-unit name="iMateJPA">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
+		<!-- create keyspace iMateV3;  -->
 		<!-- Mandatory column families to be created in KEYSPACE before using entityManager  -->
 		<!-- create column family Collection_Container with comparator = 'DynamicCompositeType(a=>AsciiType,b=>BytesType,i=>IntegerType,x=>LexicalUUIDType,l=>LongType,t=>TimeUUIDType,s=>UTF8Type,u=>UUIDType,A=>AsciiType(reversed=true),B=>BytesType(reversed=true),I=>IntegerType(reversed=true),X=>LexicalUUIDType(reversed=true),L=>LongType(reversed=true),T=>TimeUUIDType(reversed=true),S=>UTF8Type(reversed=true),U=>UUIDType(reversed=true))';  -->
 		<!-- create column family Index_Container      with comparator = 'DynamicCompositeType(a=>AsciiType,b=>BytesType,i=>IntegerType,x=>LexicalUUIDType,l=>LongType,t=>TimeUUIDType,s=>UTF8Type,u=>UUIDType,A=>AsciiType(reversed=true),B=>BytesType(reversed=true),I=>IntegerType(reversed=true),X=>LexicalUUIDType(reversed=true),L=>LongType(reversed=true),T=>TimeUUIDType(reversed=true),S=>UTF8Type(reversed=true),U=>UUIDType(reversed=true))';  -->

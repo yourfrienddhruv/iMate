@@ -2,13 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/glassfish-3-1-J2EE6-Client"/>
-	<classpathentry kind="lib" path="/iMateEAR/EarContent/lib/uuid-3.2.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/glassfish-J2EE6-Client"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GlassfishRuntime"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="/iMateClient/build/classes"/>
 	<classpathentry kind="lib" path="/iMateJson/bin"/>
 	<classpathentry kind="lib" path="/iMateEAR/EarContent/lib/gson-2.0.jar"/>
+	<classpathentry kind="lib" path="/iMateEAR/EarContent/lib/uuid-3.2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,44 +1,12 @@
 package com.dstar.imate.web.ws.base.data;
 
-import com.dstar.imate.transport.Response;
 
 
-public class JsonResponse implements IJsonInteraction {
+public class JsonResponse extends AbstractJsonInteraction {
 	private static final long serialVersionUID = 1L;
-	String type; //null means normal request, not a PROTOCOL request
-	String callback;
-	String operation;
-	Response request;
-	public JsonResponse() {
-		super();
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public String getCallback() {
-		return callback;
-	}
-	public void setCallback(String callback) {
-		this.callback = callback;
-	}
-	public String getOperation() {
-		return operation;
-	}
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
-	public Response getRequest() {
-		return request;
-	}
-	public void setRequest(Response request) {
-		this.request = request;
-	}
 	@Override
 	public String toString() {
-		return "JsonResponse [type=" + type + ", callback=" + callback + ", operation=" + operation + ", request=" + request + "]";
+		return "JsonResponse [type=" + type + ", callback=" + callback + ", operation=" + operation + ", data=" + data + "]";
 	} 
 	
 }

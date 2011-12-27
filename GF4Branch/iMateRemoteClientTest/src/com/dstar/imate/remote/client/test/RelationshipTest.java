@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.SortedSet;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import com.dstar.imate.remote.RelationshipManager;
@@ -36,7 +37,7 @@ public class RelationshipTest {
 		// env.put(Context.PROVIDER_URL, "127.0.0.1:1199,127.0.0.1:1399");
 
 		// Glassfish 3.1
-		//env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.impl.SerialInitContextFactory");
+		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.impl.SerialInitContextFactory");
 		//env.put("org.omg.CORBA.ORBInitialHost", "dhrgohil.in.ibm.com");
 		//env.put("org.omg.CORBA.ORBInitialHost", "115.118.181.82");
 		env.put("org.omg.CORBA.ORBInitialPort", "3700");

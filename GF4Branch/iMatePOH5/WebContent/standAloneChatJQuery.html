@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Glassfish Chat</title>
+<link rel="stylesheet" href="stylesheets/default.css" type="text/css" />
+<link type="text/css" href="scripts/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="scripts/jquery/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="scripts/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript">
+			var iMate={};	//define root namesapce
+			iMate.chat={};	//define module namesapce
+			iMate.chat.app={	//define app
+				init:function(){	//app entry point
+						this.setup();
+						this.wsInit();
+					},
+				setup:function(){	// app onetime configuration
+					//Converting all button to Jquey Buttons
+					$( "input:button" ).button(); 
+					// Dialog			
+					$('#login-form').dialog({
+						autoOpen: true,
+						width: 600,
+						modal:true,
+						show: "fadeIn",
+						hide: "fadeOut",
+						buttons: {
+							"Login": function() {
+										iMate.chat.app.requestLogin(); 
+									}
+								}
+						});
+					// setup post button
+					$('#post-button').click(this.doSendMessage);
+					
+					},
+				// app sepcific variables and methods follows..
+				ws:null,
+				url: 'ws://localhost:8080/RelationshipService',
+				count:0,
+				wsInit:function(){
+						if ("WebSocket" in window || "MozWebSocket" in window) {
+				            this.wsListen();
+				        } else {
+				            $('#missing-sockets').show();
+				            $('#login-name').show();
+				            $('#display').show();
+				        }
+					},
+				wsListen: function() {
+					console.log('ws Initing..');
+			        $('#websockets-frame').attr('src', this.url + '?' + this.count);
+			        this.count ++;
+			        var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
+			        ws = new Socket(this.url);
+			        ws.onopen=this.wsRegister;
+					ws.onclose = this.wsClosed;
+					ws.onmessage= function (evt) {eval(evt.data);} //calling handlers automatically on response
+			    },
+			    wsRegister:function(){
+			    		console.log('ws Open now, doing registration.');
+			    		var req={};
+			        	req.type="PROTOCOL";
+			        	req.operation="session_set_notificationHandler";
+			        	req.callback="window.parent.app.update";
+			        	ws.send(JSON.stringify(req));
+			    },
+			    wsClosed:function(){
+				    	console.log('ws closed, asking for reauth.');
+						$('#login-form').dialog('open');
+			    	},
+				requestLogin:function(){
+						var username = $('#login-name').attr('value');
+			        	var req={};//req2
+			        	req.operation="login";
+			        	req.callback="iMate.chat.app.handleLogin";
+			        	req.data={"messageKey":username};
+			        	ws.send(JSON.stringify(req));
+					},
+				handleLogin:function(response){
+						//single handler for response.operation="login"
+						console.log('Handling response'+JSON.stringify(response));
+						var ptext;
+				        if (response) {
+					        if (response.data.success) {
+					        	ptext='Welcome '+response.data.data.firstName + '!';
+				                console.log('Closing dialog');
+				                $('#login-form').dialog('close');
+				                $('#message-form').fadeIn('slow');
+				        	}else{
+				        		console.log('Failed login');
+				        		ptext=response.data.messageKey;
+				        	}
+				        }else{
+				        	ptext="Invalid response from server, please retry!";
+				        }
+				        $('<p/>').text(ptext).appendTo('#display');
+					},
+				doSendMessage :function(){
+						var msg = $('#message').attr('value');
+			        	var req={};//req2
+			        	req.operation="sendMessage";
+			        	req.callback="iMate.chat.app.messageRecorded";
+			        	req.data={"messageKey":msg};
+			        	ws.send(JSON.stringify(req));
+			        	$('<p/>').text(msg).appendTo('#display');
+			        	$('#message').attr('value','');//clean the inputbox
+					},
+				messageRecorded :function(response){
+						//single handler for response.operation="sendMessage"
+						console.log('Message successfully recorded at server'+JSON.stringify(response));
+				}			
+			};
+
+			// start the app
+			$(function(){iMate.chat.app.init();});			
+		</script>
+</head>
+<body>
+	<div id="container">
+		<div id="container-inner">
+			<div id="header">
+				<h1>Glassfish Chat</h1>
+			</div>
+			<div id="main">
+				<div id="display"></div>
+				<div id="form">
+					<div id="login-form" title="Provide your username for Login">
+						<input id="login-name" type="text" value="yourfrienddhruv" />
+						<div id="missing-sockets">Your browser does not support websockets.</div>
+					</div>
+					<div id="message-form" style="display: none;">
+						<div>
+							<div id="system-message">Please input your msgs:</div>
+							<textarea id="message" name="message" rows="2" cols="40"></textarea>
+							<br /> <input id="post-button" type="button" value="Post Message" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<iframe id="websockets-frame" style="display: none;"></iframe>
+</body>
+</html>

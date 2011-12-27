@@ -21,7 +21,7 @@ public class RelationshipManagerFacade extends BaseFacade<RelationshipManager<Re
 		if(manager!=null){
 			return new RelationshipManagerFacade(manager);
 		}else{
-			throw new IllegalArgumentException("Cant initilize Facade,EJB Reference is null. RelationshipManager="+manager);
+			throw new IllegalArgumentException("Cant initilize Facade,EJB manager Reference is null.");
 		}
 	}
 	@Override

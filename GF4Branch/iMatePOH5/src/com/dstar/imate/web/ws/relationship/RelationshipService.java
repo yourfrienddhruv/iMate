@@ -9,12 +9,14 @@ import javax.naming.NamingException;
 import org.glassfish.grizzly.websockets.ProtocolHandler;
 import org.glassfish.grizzly.websockets.WebSocketListener;
 
+import com.dstar.imate.data.StringData;
 import com.dstar.imate.remote.RelationshipManager;
 import com.dstar.imate.remote.data.Group;
 import com.dstar.imate.remote.data.Relationship;
 import com.dstar.imate.remote.data.UserProfile;
 import com.dstar.imate.remote.facade.RelationshipManagerFacade;
 import com.dstar.imate.transport.Response;
+import com.dstar.imate.transport.ResponseData;
 import com.dstar.imate.web.ws.base.JsonWebSocketApplication;
 import com.dstar.imate.web.ws.base.StandaloneWebSocketServer;
 import com.dstar.imate.web.ws.base.data.JsonRequest;
@@ -22,7 +24,54 @@ import com.dstar.imate.web.ws.base.data.JsonResponse;
 
 public class RelationshipService extends JsonWebSocketApplication<SecureServiceSession> {
 	public static final String OP_LOGIN = "login";
+	public static final String OP_SENDMESSAGE = "sendMessage";
 	private RelationshipManagerFacade relationshipManager;
+	
+	public RelationshipService(RelationshipManagerFacade manager){
+		super();
+		if(manager==null){
+			this.relationshipManager=doManualInjection();
+		}else{
+			this.relationshipManager=manager;
+		}
+	}
+	
+	@Override
+	public SecureServiceSession createSocket(ProtocolHandler handler, WebSocketListener... listeners) {
+		return new SecureServiceSession(handler, listeners);
+	}
+
+	@Override
+	public String getApplicationBaseURI() {
+		return "/RelationshipService";
+	}
+
+	@Override
+	public JsonResponse processRequest(JsonRequest req) {
+		JsonResponse resp= new JsonResponse();
+		if (OP_LOGIN.equals(req.getOperation())) {
+			resp.setData(doLogin(req.getData().getMessageKey()));
+		}else if(OP_SENDMESSAGE.equals(req.getOperation())){
+			 resp.setData(ResponseData.positive(new StringData("msg.recorded")));
+		} else {
+			 resp.setData(ResponseData.negative("operation.unkown", null));
+		}
+		return resp;
+	}
+
+	private Response doLogin(String username) {
+		return relationshipManager.fetchProfile(username);
+	}
+	
+	//=============== test support methods =========================//
+
+	public static void main(String[] args) throws Exception {
+		System.setProperty("java.security.main","");
+		System.setProperty("java.security.policy","AllPermission.policy");
+		System.setSecurityManager(new RMISecurityManager());
+		
+		StandaloneWebSocketServer.runServer(null, 0, new RelationshipService(null));
+	}
 	
 	private static RelationshipManagerFacade doManualInjection() {
 		try {
@@ -41,46 +90,5 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 			throw new RuntimeException(e);
 			// @TODO if service is not in serviceable mode then should fail, so client knows and don't send operations.
 		}
-	}
-	public RelationshipService(RelationshipManagerFacade manager){
-		super();
-		if(manager==null){
-			this.relationshipManager=doManualInjection();
-		}else{
-			this.relationshipManager=manager;
-		}
-	}
-	
-	@Override
-	public SecureServiceSession createSocket(ProtocolHandler handler, WebSocketListener... listeners) {
-		return new SecureServiceSession(handler, listeners);
-	}
-
-	public static void main(String[] args) throws Exception {
-		System.setProperty("java.security.main","");
-		System.setProperty("java.security.policy","AllPermission.policy");
-		System.setSecurityManager(new RMISecurityManager());
-		
-		StandaloneWebSocketServer.runServer(null, 0, new RelationshipService(null));
-	}
-
-	@Override
-	public String getApplicationBaseURI() {
-		return "/RelationshipService";
-	}
-
-	@Override
-	public JsonResponse processRequest(JsonRequest req) {
-		if (OP_LOGIN.equals(req.getOperation())) {
-			JsonResponse resp= new JsonResponse();
-			resp.setRequest(doLogin(req.getRequest().getMessageKey()));
-			return  resp ; //doLogin(req.getRequest().getMessageKey());
-		} else {
-			return  new JsonResponse() ;// ResponseData.negative("operation.unkown", null);
-		}
-	}
-
-	private Response doLogin(String username) {
-		return relationshipManager.fetchProfile(username);
 	}
 }
