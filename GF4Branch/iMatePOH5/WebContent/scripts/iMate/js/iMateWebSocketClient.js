@@ -12,6 +12,7 @@ function wsprotocolrequest(_operation, _callback, _data) {
 };
 
 function wsapplication() {
+	var _this = this; // using closure : as onmessage will be called from websocket context not from app context.
 	// define app
 	this.init = function() { // app entry point
 		this.setup();
@@ -22,12 +23,17 @@ function wsapplication() {
 		console.log('wsapplication setup done.');
 	};
 	// app sepcific variables and methods follows..
-	this.ws;
-	this.url; /* TODO @override */
-	this.count = 0, this.wsInit = function() {
+	this._ws;
+	this._url;
+	this.setURL = function(_wsURL) { /* TODO @call */
+		this._url=_wsURL;
+	};
+	this.wsFrameName = '#websockets-frame'; //default name of iframe element on page.
+	this.count = 0;
+	this.autoReconnect = true; //by default reconnects on close each 5 sec.
+	this.wsInit = function() {
 		if ("WebSocket" in window || "MozWebSocket" in window) {
 			this.wsListen();
-			this.wsReady();
 		} else {
 			this.wsNotSupported();
 		}
@@ -37,15 +43,16 @@ function wsapplication() {
 		console.log('wsapplication wsNotSupported in your browser, No server side communication can be done.');
 	};
 	this.wsListen = function() {
+		//this._url=this._url || arguments[0];
+		_connectURL = this._ws?this._ws.URL:this._url;
+		alert(JSON.stringify(_connectURL));
 		//console.log('wsapplication wsListen..');
-		$('#websockets-frame').attr('src', this.url + '?' + this.count);
-		this.count++;
+		$(this.wsFrameName).attr('src', this._url + '?' + this.count++);
 		var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
-		ws = new Socket(this.url);
-		ws.onopen = this.wsRegister;
-		ws.onclose = this.wsClosed;
-		var _this = this; // using closure : as onmessage will be called from websocket context not from app context.
-		ws.onmessage = function(evt) {
+		this._ws = new Socket(_connectURL);
+		this._ws.onopen = this.wsRegister;
+		this._ws.onclose = this.wsClosed;
+		this._ws.onmessage = function(evt) {
 			// console.log('wsapplication ws.onmessage:'+evt.data.substring(5,evt.data.length-1) + '\n'+evt.data.substring(0,4));
 			if (evt.data.substring(0, 4) == "null") {
 				// if callback is null then delegate to default callback, remove null callback >> null({xyz:abc})
@@ -60,18 +67,35 @@ function wsapplication() {
 	this.wsReady = function() {/* TODO @override */
 		console.log('wsapplication wsReady.');
 	};
-	this.wsDefaultCallback = function(resp) {
-		console.log('wsapplication wsDefaultCallback :' + JSON.stringify(resp));
+	this.wsDefaultCallback = function(_resp) {
+		console.log('wsapplication wsDefaultCallback :' + JSON.stringify(_resp));
 	};
-	this.wsNotificationCallback = function(notif) { /* TODO @override */
-		console.log('wsapplication wsNotificationCallback:' + notif);
+	this.wsNotificationCallback = function(_notif) { /* TODO @override */
+		console.log('wsapplication wsNotificationCallback:' + _notif);
 	};
 	this.wsRegister = function() {
 		console.log('wsapplication wsRegister: doing registration.');
 		var req = new wsprotocolrequest("session_set_notificationHandler", "_this.wsNotificationCallback");
-		ws.send(JSON.stringify(req));
+		this._ws.send(JSON.stringify(req));
+		_this.wsReady();
+	};
+	this.wsClosing = function() { /* TODO @override */
+		console.log('wsapplication wsClosing.');
 	};
 	this.wsClosed = function() {
-		console.log('wsapplication wsClosed done.');
+		_this.wsClosing();
+		// NOT IMPLEMENTED  if(_this.autoReconnect){//re connects to ws in case closed, due to ideal timeout at user or server level.
+			//try to reconnect in 5 seconds
+		// NOT IMPLEMENTED console.log('wsapplication wsClosed will reconnect after 5 second.');
+		// NOT IMPLEMENTED _this.wsListen(); // NOT IMPLEMENTED
+			//window.setTimeout(_this.wsListen.bind(_this), 5000);// wrong scope.
+		// NOT IMPLEMENTED }else{
+			console.log('wsapplication wsClosed.');
+		// NOT IMPLEMENTED}
+	};
+	this.wsSend = function(_operationName,_handlerName,_reqData) { /* TODO @call */
+		var msg = JSON.stringify(new wsrequest(_operationName, _handlerName, _reqData));
+		console.log('Sending:'+msg);
+		this._ws.send(msg);
 	};
 };

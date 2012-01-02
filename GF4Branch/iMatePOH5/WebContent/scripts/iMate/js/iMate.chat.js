@@ -1,7 +1,7 @@
 iMate.chat = function() {};  // define module class under root namesapce
 iMate.chat.prototype = new wsapplication();// extend from wsapplication
 iMate.chat.app = new iMate.chat(); // create instance of module application
-iMate.chat.app.url = 'ws://localhost:8080/RelationshipService'; /* @Overrride */
+iMate.chat.app.setURL('ws://localhost:8080/RelationshipService');
 iMate.chat.app.setup = function() {/* @Overrride */// app onetime configuration
 	// Converting all button to Jquey Buttons
 	$("input:button").button();
@@ -27,7 +27,7 @@ iMate.chat.app.wsNotSupported = function() {/* @Overrride */
 	$('#login-name').hide();
 	$('#display').hide();
 };
-iMate.chat.app.wsClosed = function() { /* @Overrride */
+iMate.chat.app.wsClosing = function() { /* @Overrride */
 	// console.log('ws closed, asking for reauth.');
 	$('#login-form').dialog('open');
 };
@@ -35,11 +35,7 @@ iMate.chat.app.wsClosed = function() { /* @Overrride */
 
 iMate.chat.app.requestLogin = function() {
 	var username = $('#login-name').attr('value');
-	// @TEST var req = new wsrequest("login", null, {
-	var req = new wsrequest("login", "iMate.chat.app.handleLogin", {
-		"messageKey" : username
-	});
-	ws.send(JSON.stringify(req));
+	this.wsSend("login","iMate.chat.app.handleLogin",{"messageKey" : username});
 };
 iMate.chat.app.handleLogin = function(response) { /* @Handles(login) */
 	// console.log('Handling response' + JSON.stringify(response));
@@ -61,10 +57,7 @@ iMate.chat.app.handleLogin = function(response) { /* @Handles(login) */
 };
 iMate.chat.app.doSendMessage = function() {
 	var msg = $('#message').attr('value');
-	var req = new wsrequest("sendMessage", "iMate.chat.app.messageRecorded", {
-		"messageKey" : msg
-	});
-	ws.send(JSON.stringify(req));
+	this.wsSend("sendMessage","iMate.chat.app.messageRecorded",{"messageKey" : msg});
 	$('<p/>').text(msg).appendTo('#display');
 	$('#message').attr('value', '');// clean the inputbox
 };

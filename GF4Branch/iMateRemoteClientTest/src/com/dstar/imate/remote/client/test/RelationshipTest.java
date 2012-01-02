@@ -76,7 +76,9 @@ public class RelationshipTest {
 	}
 
 	private static void fetch(RelationshipManagerFacade manager) {
-		ResponseData<UserProfile> found = manager.fetchProfile("yourfrienddhruv");
+		ResponseData<UserProfile> found = manager.fetchProfile(null);
+		System.out.println(Json.to(found));
+		found = manager.fetchProfile("yourfrienddhruv");
 		System.out.println(Json.to(found));
 	}
 
