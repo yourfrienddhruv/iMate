@@ -18,11 +18,11 @@ $.extend({
 		events: {}
 	},
 	websocket: function(url, s) {
-		var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
-		if (Socket==undefined){
+		if (!("MozWebSocket" in window || "WebSocket" in window )){
 			$.websocketSettings.notsupported.call(this);
 			return null; //can't create ws
 		}
+		var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
 		var _ws = Socket ? new Socket( url ) : {
 			send: function(m){ return false; },
 			close: function(){}
