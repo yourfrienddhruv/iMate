@@ -14,18 +14,7 @@ import com.dstar.imate.web.ws.base.data.JsonResponse;
 
 public abstract class JsonWebSocket extends DefaultWebSocket {
     private static final Logger logger = Grizzly.logger(JsonWebSocket.class);
-    
-    private String notificationCallback;
-    
-    protected String getNotificationCallback() {
-		return notificationCallback;
-	}
-
-	protected void setNotificationCallback(String notificationCallback) {
-		this.notificationCallback = notificationCallback;
-	}
-
-	public JsonWebSocket(ProtocolHandler handler, WebSocketListener... listeners) {
+    public JsonWebSocket(ProtocolHandler handler, WebSocketListener... listeners) {
         super(handler, listeners);
     }
     
@@ -35,7 +24,7 @@ public abstract class JsonWebSocket extends DefaultWebSocket {
     */
     private void send(JsonResponse resp) {
         try {
-            final String msg =  resp.getCallback()+"("+ Json.to(resp) +")" ;
+            final String msg =  Json.to(resp);
             logger.log(Level.INFO, "<<== {0}",msg);
             send(msg);
         } catch (WebSocketException e) {
@@ -45,7 +34,6 @@ public abstract class JsonWebSocket extends DefaultWebSocket {
     }
     
     public void notify(JsonResponse notif) {
-    	notif.setCallback(getNotificationCallback());
         send(notif);
     }
     

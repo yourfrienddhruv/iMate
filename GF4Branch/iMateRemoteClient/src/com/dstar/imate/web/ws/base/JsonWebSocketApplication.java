@@ -38,8 +38,7 @@ public abstract class JsonWebSocketApplication<T extends JsonWebSocket> extends 
 		logger.log(Level.INFO,"==>>:Parsed:{0}",req);
 		if(isUserRequest(req)){
 			JsonResponse resp=processRequest(req);
-			resp.setOperation(req.getOperation());
-			resp.setCallback(req.getCallback());
+			if(resp.getType()==null) resp.setType(req.getType());
 			((T) websocket).sendResponse(resp);
 		}else{
 			parseCustomProtocol((T) websocket,req);
@@ -47,20 +46,11 @@ public abstract class JsonWebSocketApplication<T extends JsonWebSocket> extends 
 	}
 
 	private boolean isUserRequest(JsonRequest req){
-		return req.getType()==null;
+		return req.getType()!=null && !req.getType().startsWith("_");
 	}
-	
-    /*public static String[] parseIncomming(String data){
-    	String[] fields=data.substring(1, data.length()-2).split(",");
-    	return new String[]{ fields[0].split(":")[VAL].trim(),fields[1].split(":")[VAL].trim(),fields[2].split(":")[VAL].trim()};
-    }*/
-    
-    public void parseCustomProtocol(T websocket, JsonRequest req){
-    	//for operation=="PROTOCOL" 
-    	if("session_set_notificationHandler".equals(req.getOperation())){
-   			websocket.setNotificationCallback(req.getCallback());
-   			logger.log(Level.INFO,"==>>:PROTOCOL:setNotificationCallback:{0}",req);
-    	}
+
+	public void parseCustomProtocol(T websocket, JsonRequest req){
+    	logger.log(Level.INFO,"==>>:PROTOCOL:{0}",req);
     }
     
 	public abstract JsonResponse processRequest(JsonRequest req);

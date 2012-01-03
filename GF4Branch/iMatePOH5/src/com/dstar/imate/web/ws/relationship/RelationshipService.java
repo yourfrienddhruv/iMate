@@ -25,16 +25,6 @@ import com.dstar.imate.web.ws.base.data.JsonResponse;
 public class RelationshipService extends JsonWebSocketApplication<SecureServiceSession> {
 	public static final String OP_LOGIN = "login";
 	public static final String OP_SENDMESSAGE = "sendMessage";
-	private RelationshipManagerFacade relationshipManager;
-	
-	public RelationshipService(RelationshipManagerFacade manager){
-		super();
-		if(manager==null){
-			this.relationshipManager=doManualInjection();
-		}else{
-			this.relationshipManager=manager;
-		}
-	}
 	
 	@Override
 	public SecureServiceSession createSocket(ProtocolHandler handler, WebSocketListener... listeners) {
@@ -49,12 +39,12 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 	@Override
 	public JsonResponse processRequest(JsonRequest req) {
 		JsonResponse resp= new JsonResponse();
-		if (OP_LOGIN.equals(req.getOperation())) {
+		if (OP_LOGIN.equals(req.getType())) {
 			resp.setData(doLogin(req.getData().getMessageKey()));
-		}else if(OP_SENDMESSAGE.equals(req.getOperation())){
+		}else if(OP_SENDMESSAGE.equals(req.getType())){
 			 resp.setData(ResponseData.positive(new StringData("msg.recorded")));
 		} else {
-			 resp.setData(ResponseData.negative("operation.unkown", null));
+			 resp.setData(ResponseData.negative(req.getData().getMessageKey(), null));
 		}
 		return resp;
 	}
@@ -63,9 +53,20 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 		return relationshipManager.fetchProfile(username);
 	}
 	
-	//=============== test support methods =========================//
+	//=============== startup config methods =========================//
 
-	public static void main(String[] args) throws Exception {
+	private RelationshipManagerFacade relationshipManager;
+	public RelationshipService(RelationshipManagerFacade manager){
+		super();
+		if(manager==null){
+			this.relationshipManager=doManualInjection();
+		}else{
+			this.relationshipManager=manager;
+		}
+	}
+	
+	//=============== test support methods =========================//
+public static void main(String[] args) throws Exception {
 		System.setProperty("java.security.main","");
 		System.setProperty("java.security.policy","AllPermission.policy");
 		System.setSecurityManager(new RMISecurityManager());

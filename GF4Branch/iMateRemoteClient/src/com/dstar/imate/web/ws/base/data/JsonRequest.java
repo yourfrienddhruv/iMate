@@ -5,6 +5,6 @@ public class JsonRequest extends AbstractJsonInteraction {
 	private static final long serialVersionUID = 1L;
 	@Override
 	public String toString() {
-		return "JsonRequest [type=" + type + ", callback=" + callback + ", operation=" + operation + ", data=" + data + "]";
+		return "JsonRequest [type=" + type + ", data=" + data + "]";
 	} 
 }

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WebSocket Chat</title>
+</head>
+<body>
+<h1>WebSocket Chat</h1>
+<section id="content"></section>
+<input id="message" type="text"/>
+<script src="scripts/jquery/js/jquery-1.6.2.min.js"></script>
+<script src="scripts/jquery/js/jquery.json-2.3.min.js"></script>
+<script src="scripts/jquery/js/jquery.websocket-0.0.1.js"></script>
+<script>
+var ws = $.websocket("ws://localhost:8080/RelationshipService", {
+        events: {
+                message: function(e) { $('#content').append(e.data.messageKey + ' M <br>') }
+        }
+});
+var ws2 = $.websocket("ws://localhost:8080/RelationshipService", {
+    events: {
+            login: function(e) { $('#content').append(e.data.messageKey + ' L <br>') }
+    }
+    //,options: { pwd:'myPwd' }
+});
+$.websocketSettings.options={user:'x'};
+$('#message').change(function(){
+  ws.send('message', {'messageKey': this.value});
+  ws2.send('message', {'messageKey': this.value});
+  ws.send('login', {'messageKey': this.value});
+  ws2.send('login', {'messageKey': this.value});
+  this.value = '';
+});
+</script>
+</body>
+</html>
