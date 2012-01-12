@@ -21,6 +21,9 @@
 		<!-- create column family UserProfile with comparator = 'BytesType'; -->
 		<class>com.dstar.imate.entity.UserProfileEntity</class>
 		
+		<!-- create column family Coupon with comparator = 'BytesType'; -->
+		<class>com.dstar.imate.entity.CouponEntity</class>
+		
 		<properties>
 			<property name="me.prettyprint.hom.classpathPrefix" value="com.dstar.imate.entity" />
 			<property name="me.prettyprint.hom.keyspace" value="iMateV3" />

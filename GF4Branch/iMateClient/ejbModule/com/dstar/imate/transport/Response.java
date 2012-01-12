@@ -8,7 +8,7 @@ import com.dstar.imate.transport.api.IResponse;
  * 
  * @author Administrator
  */
-public class Response  implements IResponse{
+public abstract class Response  implements IResponse{
 	private static final long serialVersionUID = 1L;
 	private boolean success=true;
 	private String messageKey=MessageKeyConstant.SUCCESS;

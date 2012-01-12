@@ -2,8 +2,6 @@ package com.dstar.imate.business;
 
 import java.util.Date;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
@@ -21,7 +19,6 @@ import com.dstar.imate.entity.RelationshipEntity;
 import com.dstar.imate.entity.UserProfileEntity;
 import com.dstar.imate.remote.RelationshipManager;
 import com.dstar.imate.transport.ResponseData;
-import com.dstar.imate.transport.ResponseDataSet;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -57,7 +54,7 @@ public class RelationshipManagerBean implements RelationshipManager<Relationship
 	}
 
 	@Override
-	public ResponseDataSet<? extends SortedSet<RelationshipEntity>> discoverRelationship(UserProfileEntity user) {
+	public ResponseData<RelationshipEntity> discoverRelationship(UserProfileEntity user) {
 		int maxResults=20;
 		log.debug("finding first {} Relationship with user {}",maxResults,user);
 		TypedQuery<RelationshipEntity> q = em.createNamedQuery("ByUserProfile", RelationshipEntity.class)
@@ -65,9 +62,9 @@ public class RelationshipManagerBean implements RelationshipManager<Relationship
 		List<RelationshipEntity> foundList = q.getResultList();
 		log.info("Result found:{}", foundList);
 		if (foundList == null) {
-			return ResponseDataSet.negative("no.user.found", new TreeSet<RelationshipEntity>());
+			return ResponseData.negativeSet("no.user.found",new RelationshipEntity[0]);
 		} else {
-			return ResponseDataSet.positive(new TreeSet<RelationshipEntity>(foundList));
+			return ResponseData.positiveSet(foundList.toArray(new RelationshipEntity[foundList.size()]));
 		}
 	}
 	
@@ -113,7 +110,7 @@ public class RelationshipManagerBean implements RelationshipManager<Relationship
 	}
 
 	@Override
-	public ResponseDataSet<? extends SortedSet<UserProfileEntity>> findProfiles(String usernamePrefix, int maxResults) {
+	public ResponseData<UserProfileEntity> findProfiles(String usernamePrefix, int maxResults) {
 		log.debug("finding first {} user with name starting {}", maxResults, usernamePrefix);
 		TypedQuery<UserProfileEntity> q = em.createNamedQuery("LikeUserName", UserProfileEntity.class)
 				.setParameter("usernameStart", usernamePrefix)
@@ -121,14 +118,14 @@ public class RelationshipManagerBean implements RelationshipManager<Relationship
 		List<UserProfileEntity> foundList = q.getResultList();
 		log.info("Result found:{}", foundList);
 		if (foundList == null) {
-			return ResponseDataSet.negative("no.user.found", new TreeSet<UserProfileEntity>());
+			return ResponseData.negativeSet("no.user.found", new UserProfileEntity[0]);
 		} else {
-			return ResponseDataSet.positive(new TreeSet<UserProfileEntity>(foundList));
+			return ResponseData.positiveSet(foundList.toArray(new UserProfileEntity[foundList.size()]));
 		}
 	}
 	
 	@Override
-	public ResponseDataSet<? extends SortedSet<GroupEntity>> findGroups(String namePrefix, int maxResults) {
+	public ResponseData<GroupEntity> findGroups(String namePrefix, int maxResults) {
 		log.debug("finding first {} group with name starting {}", maxResults, namePrefix);
 		TypedQuery<GroupEntity> q = em.createNamedQuery("LikeName", GroupEntity.class)
 				.setParameter("nameStart", namePrefix)
@@ -136,9 +133,9 @@ public class RelationshipManagerBean implements RelationshipManager<Relationship
 		List<GroupEntity> foundList = q.getResultList();
 		log.info("Result found:{}", foundList);
 		if (foundList == null) {
-			return ResponseDataSet.negative("no.user.found", new TreeSet<GroupEntity>());
+			return ResponseData.negativeSet("no.user.found", new GroupEntity[0]);
 		} else {
-			return ResponseDataSet.positive(new TreeSet<GroupEntity>(foundList));
+			return ResponseData.positiveSet(foundList.toArray(new GroupEntity[foundList.size()]));
 		}
 	}
 

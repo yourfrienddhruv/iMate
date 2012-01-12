@@ -3,18 +3,17 @@ package com.dstar.imate.remote.client.test;
 import java.rmi.RMISecurityManager;
 import java.util.Date;
 import java.util.Properties;
-import java.util.SortedSet;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import com.dstar.imate.data.IGroup;
 import com.dstar.imate.remote.RelationshipManager;
 import com.dstar.imate.remote.data.Group;
 import com.dstar.imate.remote.data.Relationship;
 import com.dstar.imate.remote.data.UserProfile;
 import com.dstar.imate.remote.facade.RelationshipManagerFacade;
 import com.dstar.imate.transport.ResponseData;
-import com.dstar.imate.transport.ResponseDataSet;
 import com.dstar.imate.web.json.base.gson.Json;
 
 /**
@@ -32,35 +31,41 @@ public class RelationshipTest {
 		Properties env = new Properties();
 		// jboss 5
 		// env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
+		// jboss 7
 		// env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.as.naming.InitialContextFactory");
 		// env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
 		// env.put(Context.PROVIDER_URL, "127.0.0.1:1199,127.0.0.1:1399");
-
+ 
 		// Glassfish 3.1
-		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.impl.SerialInitContextFactory");
-		//env.put("org.omg.CORBA.ORBInitialHost", "dhrgohil.in.ibm.com");
-		//env.put("org.omg.CORBA.ORBInitialHost", "115.118.181.82");
-		env.put("org.omg.CORBA.ORBInitialPort", "3700");
+		//env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.impl.SerialInitContextFactory");
+		//env.put("org.omg.CORBA.ORBInitialPort", "3700");
+		
+		//WL 12c
+		env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
+		env.put(Context.PROVIDER_URL, "t3://localhost:7001");
+
 		InitialContext ctx = new InitialContext(env);
 
 		@SuppressWarnings("unchecked")
 		RelationshipManager<Relationship, UserProfile, Group> managerRemote = (RelationshipManager<Relationship, UserProfile, Group>)
-						ctx.lookup("java:global/iMateEAR/iMate/RelationshipManagerBean");
+						//GF //JBOSS ctx.lookup("java:global/iMateEAR/iMate/RelationshipManagerBean");
+						//WL   : as we deploy it in autodeply thus name changes
+				ctx.lookup("java:global/_appsdir_iMateEAR_ear/iMate/RelationshipManagerBean!com.dstar.imate.remote.RelationshipManager");
 		RelationshipManagerFacade manager = RelationshipManagerFacade.getInstance(managerRemote);
 			
-		//createUser(manager);
+		createUser(manager);
 
-		fetch(manager);
+		//fetch(manager);
 
 		// find (manager);
 
-		//createGroup(manager);
+		createGroup(manager);
 		// createRelationship(manager);
 
 	}
 
 	private static void find(RelationshipManagerFacade manager) {
-		ResponseDataSet<? extends SortedSet<UserProfile>> found = manager.findProfiles("j", 10);
+		ResponseData<UserProfile> found = manager.findProfiles("j", 10);
 		System.out.println(found);
 	}
 
@@ -96,11 +101,11 @@ public class RelationshipTest {
 		ResponseData<UserProfile> foundUser = manager.fetchProfile("yourfrienddhruv");
 		System.out.println("fetched user" + foundUser);
 
-		ResponseDataSet<? extends SortedSet<Group>> groups = manager.findGroups("NoSQL", 1);
-		System.out.println("found group" + groups.getDataSet().first());
+		ResponseData<Group> groups = manager.findGroups("NoSQL", 1);
+		System.out.println("found group" + groups.getDataSet()[0]);
 		Relationship relationship = new Relationship();
 		relationship.setUser(foundUser.getData());
-		relationship.setGroup(groups.getDataSet().first());
+		relationship.setGroup(groups.getDataSet()[0]);
 		relationship.setRelationshipType("user_group");
 		ResponseData<Relationship> created = manager.addRelationship(relationship);
 		System.out.println("created relationship " + created);

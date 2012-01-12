@@ -38,11 +38,12 @@
 	<script type="text/javascript" src="scripts/jquery/js/jquery.websocket-0.0.1.js"></script>
 	<script type="text/javascript" src="scripts/iMate/js/iMate.chat.js"></script>
 	<script type="text/javascript">
-		// start the app 
-		$(function() {
-			$.websocketSettings.notsupported=iMate.chat.wsNotSupported;
-			iMate.chat.init();
-		});
+		(function($){
+			$(function() {// start the app 
+				$.websocketSettings.notsupported=iMate.chat.wsNotSupported;
+				iMate.chat.init();
+			});
+		})(jQuery);
 	</script>
 </body>
 </html>

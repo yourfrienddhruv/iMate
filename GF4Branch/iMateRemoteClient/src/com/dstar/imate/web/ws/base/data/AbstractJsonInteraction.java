@@ -1,11 +1,12 @@
 package com.dstar.imate.web.ws.base.data;
 
-import com.dstar.imate.transport.Response;
+import com.dstar.imate.data.IData;
+import com.dstar.imate.transport.ResponseData;
 
-public class AbstractJsonInteraction implements IJsonInteraction {
+public class AbstractJsonInteraction<DataClass extends IData> implements IJsonInteraction {
 	private static final long serialVersionUID = 1L;
 	String type; //null means normal request, not a PROTOCOL request
-	Response data;
+	ResponseData<DataClass> data;
 	public AbstractJsonInteraction() {
 		super();
 	}
@@ -15,10 +16,10 @@ public class AbstractJsonInteraction implements IJsonInteraction {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public Response getData() {
+	public ResponseData<DataClass> getData() {
 		return data;
 	}
-	public void setData(Response ResponseData) {
-		this.data = ResponseData;
+	public void setData(ResponseData<DataClass> responseData) {
+		this.data = responseData;
 	}
 }

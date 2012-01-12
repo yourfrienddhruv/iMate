@@ -56,7 +56,7 @@ public class RelationshipServiceRegister extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		this.app = new RelationshipService(RelationshipManagerFacade.getInstance(relationshipManager));
-		System.out.println("Registoring this.app"+this.app);
+		System.out.println("Registoring ws app :"+this.app);
 		WebSocketEngine.getEngine().register(app);
 	}
 

@@ -19,7 +19,8 @@
         <dependent-module archiveName="iMateRemoteClient.jar" deploy-path="/lib" handle="module:/resource/iMateRemoteClient/iMateRemoteClient">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="iMateJson.jar" deploy-path="/lib" handle="module:/resource/iMateJson/iMateJson">
+        <dependent-module archiveName="iMateGroupon.war" deploy-path="/" handle="module:/resource/iMateGroupon/iMateGroupon">
+            <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

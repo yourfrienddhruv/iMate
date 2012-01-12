@@ -37,4 +37,11 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>lib-classes</name>
+			<type>2</type>
+			<location>C:/Innovate/eclipseWorkspace/iMateGIT/GF4Branch/iMateClient/build/classes</location>
+		</link>
+	</linkedResources>
 </projectDescription>

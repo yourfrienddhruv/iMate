@@ -15,7 +15,6 @@ import com.dstar.imate.remote.data.Group;
 import com.dstar.imate.remote.data.Relationship;
 import com.dstar.imate.remote.data.UserProfile;
 import com.dstar.imate.remote.facade.RelationshipManagerFacade;
-import com.dstar.imate.transport.Response;
 import com.dstar.imate.transport.ResponseData;
 import com.dstar.imate.web.ws.base.JsonWebSocketApplication;
 import com.dstar.imate.web.ws.base.StandaloneWebSocketServer;
@@ -37,19 +36,25 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 	}
 
 	@Override
-	public JsonResponse processRequest(JsonRequest req) {
-		JsonResponse resp= new JsonResponse();
+	public JsonResponse processRequest(String reqJson) {
+		//@TODO JsonRequest req
+		 JsonRequest req=null;
 		if (OP_LOGIN.equals(req.getType())) {
-			resp.setData(doLogin(req.getData().getMessageKey()));
+			JsonResponse<UserProfile> resp = new JsonResponse<UserProfile>();
+			 resp.setData(doLogin(req.getData().getMessageKey()));
+			 return resp;
 		}else if(OP_SENDMESSAGE.equals(req.getType())){
-			 resp.setData(ResponseData.positive(new StringData("msg.recorded")));
+			JsonResponse<StringData> resp = new JsonResponse<StringData>();
+			resp.setData(ResponseData.positive(new StringData("msg.recorded")));
+			return resp;
 		} else {
-			 resp.setData(ResponseData.negative(req.getData().getMessageKey(), null));
+			JsonResponse<StringData> resp = new JsonResponse<StringData>();
+			resp.setData(ResponseData.negative(req.getData().getMessageKey(), new StringData("Unsupported operation requested.")));
+			return resp;
 		}
-		return resp;
 	}
 
-	private Response doLogin(String username) {
+	private ResponseData<UserProfile> doLogin(String username) {
 		return relationshipManager.fetchProfile(username);
 	}
 	
@@ -66,12 +71,12 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 	}
 	
 	//=============== test support methods =========================//
-public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		System.setProperty("java.security.main","");
 		System.setProperty("java.security.policy","AllPermission.policy");
 		System.setSecurityManager(new RMISecurityManager());
 		
-		StandaloneWebSocketServer.runServer(null, 0, new RelationshipService(null));
+		StandaloneWebSocketServer.runServer(new RelationshipService(null));
 	}
 	
 	private static RelationshipManagerFacade doManualInjection() {

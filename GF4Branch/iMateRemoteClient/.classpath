@@ -5,7 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GlassfishRuntime"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="/iMateClient/build/classes"/>
-	<classpathentry kind="lib" path="/iMateJson/bin"/>
 	<classpathentry kind="lib" path="/iMateEAR/EarContent/lib/gson-2.0.jar"/>
 	<classpathentry kind="lib" path="/iMateEAR/EarContent/lib/uuid-3.2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>

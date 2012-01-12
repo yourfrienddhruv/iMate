@@ -8,7 +8,7 @@
 		<project>iMateJPA</project>
 		<project>iMatePOH5</project>
 		<project>iMateRemoteClient</project>
-		<project>iMateJson</project>
+		<project>iMateGroupon</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

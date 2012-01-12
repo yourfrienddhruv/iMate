@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/iMateClient"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/iMateJson"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/iMateRemoteClient"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/glassfish-J2EE6-Client"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/weblogic12c-client"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
