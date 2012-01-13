@@ -1,0 +1,23 @@
+package com.dstar.imate.business;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+
+@Singleton
+public class ValidatorFactoryBean {
+
+	private ValidatorFactory factory;
+
+	@PostConstruct
+	protected void setupFactory() {
+		factory = Validation.buildDefaultValidatorFactory();
+	}
+	
+	public ValidatorFactory getFactory() {
+		return factory;
+	}
+
+
+}

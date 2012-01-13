@@ -1,0 +1,30 @@
+/*.demoHeaders {
+	margin-top: 1.5em;
+	margin-bottom: 1em;
+}
+*/
+/*
+.span10 {
+	width: 500px;
+	margin-right: 10px;
+}
+
+.span4 {
+	width: 290px;
+}
+.ui-widget-overlay {
+	width: 500px;
+}
+*/
+
+.alert-message p{
+	line-height:18px;
+	margin-bottom:18px;
+}
+/*added by dhruv to fix height with prefixed ones, removed text area as was braking "rows" */ 
+input[type="text"],
+input[type="password"],
+.ui-autocomplete-input,
+.uneditable-input{
+  height: 18px;
+}

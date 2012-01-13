@@ -1,0 +1,44 @@
+package com.dstar.imate.business;
+
+import java.util.Set;
+
+import javax.ejb.EJB;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+
+import org.hibernate.validator.method.MethodConstraintViolation;
+import org.hibernate.validator.method.MethodConstraintViolationException;
+import org.hibernate.validator.method.MethodValidator;
+
+@Interceptor
+public class MethodValidationInterceptor {
+
+	@EJB
+	private ValidatorFactoryBean validatorFactory;
+
+	@AroundInvoke
+	public Object validateMethodInvocation(InvocationContext ctx) throws Exception {
+
+		MethodValidator validator = validatorFactory.getFactory().getValidator().unwrap(MethodValidator.class);
+		//MethodValidator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator()
+			//	.unwrap(MethodValidator.class);
+
+		Set<MethodConstraintViolation<Object>> violations = validator.validateAllParameters(ctx.getTarget(), ctx.getMethod(),
+				ctx.getParameters());
+
+		if (!violations.isEmpty()) {
+			throw new MethodConstraintViolationException(violations);
+		}
+
+		Object result = ctx.proceed();
+
+		violations = validator.validateReturnValue(ctx.getTarget(), ctx.getMethod(), result);
+
+		if (!violations.isEmpty()) {
+			throw new MethodConstraintViolationException(violations);
+		}
+
+		return result;
+	}
+}
