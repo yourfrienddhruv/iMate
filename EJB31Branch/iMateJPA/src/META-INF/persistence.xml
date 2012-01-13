@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+	http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+	<persistence-unit name="iMateJPA">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+
+		<!-- create keyspace iMateV3;  -->
+		<!-- Mandatory column families to be created in KEYSPACE before using entityManager  -->
+		<!-- create column family Collection_Container with comparator = 'DynamicCompositeType(a=>AsciiType,b=>BytesType,i=>IntegerType,x=>LexicalUUIDType,l=>LongType,t=>TimeUUIDType,s=>UTF8Type,u=>UUIDType,A=>AsciiType(reversed=true),B=>BytesType(reversed=true),I=>IntegerType(reversed=true),X=>LexicalUUIDType(reversed=true),L=>LongType(reversed=true),T=>TimeUUIDType(reversed=true),S=>UTF8Type(reversed=true),U=>UUIDType(reversed=true))';  -->
+		<!-- create column family Index_Container      with comparator = 'DynamicCompositeType(a=>AsciiType,b=>BytesType,i=>IntegerType,x=>LexicalUUIDType,l=>LongType,t=>TimeUUIDType,s=>UTF8Type,u=>UUIDType,A=>AsciiType(reversed=true),B=>BytesType(reversed=true),I=>IntegerType(reversed=true),X=>LexicalUUIDType(reversed=true),L=>LongType(reversed=true),T=>TimeUUIDType(reversed=true),S=>UTF8Type(reversed=true),U=>UUIDType(reversed=true))';  -->
+		<!-- later on -->
+		<!--  start cassandra-cli -->
+		<!--  > connect localhost/9160 -->
+		<!--  >  use iMateV3; -->
+		<!--  and create any additional CF to be made -->
+		<class>com.dstar.imate.data.AbstractEntity</class>
+		
+		<!-- create column family Group with comparator = 'BytesType';  -->
+		<class>com.dstar.imate.data.Group</class>
+		
+		<!-- create column family Relationship with comparator = 'BytesType'; -->
+		<class>com.dstar.imate.data.Relationship</class>
+		
+		<!-- create column family UserProfile with comparator = 'BytesType'; -->
+		<class>com.dstar.imate.data.UserProfile</class>
+		
+		<!-- create column family Coupon with comparator = 'BytesType'; -->
+		<class>com.dstar.imate.data.Coupon</class>
+		
+		<properties>
+			<property name="me.prettyprint.hom.classpathPrefix" value="com.dstar.imate.entity" />
+			<property name="me.prettyprint.hom.keyspace" value="iMateV3" />
+			<property name="me.prettyprint.hom.clusterName" value="iMateCluster" />
+			<property name="me.prettyprint.hom.hostList" value="localhost:9160" />
+			<property name="openjpa.BrokerFactory" value="abstractstore" />
+			<property name="openjpa.abstractstore.AbstractStoreManager" value="com.datastax.hectorjpa.store.CassandraStoreManager" />
+			<property name="openjpa.MetaDataRepository" value="com.datastax.hectorjpa.store.CassandraMetaDataRepository" />
+
+			<property name="openjpa.Optimistic" value="false" />
+			<property name="openjpa.LockManager" value="none" />
+			<!-- <property name="openjpa.ConnectionURL" value="localhost:9161" /> -->
+			<!-- explicitly disable runtime enhancement support. It breaks a lot of proxy functionality needed for indexing -->
+			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
+			<property name="openjpa.DynamicEnhancementAgent" value="false" />
+			<!-- <property name="openjpa.Log" value="slf4j" /> -->
+			<property name="openjpa.Log" value="DefaultLevel=INFO, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
+
+			<!-- Used to test the serialization property. If not set will default to java default serialization -->
+			<property name="com.datastax.jpa.embeddedserializer" value="com.datastax.hectorjpa.serialize.XStreamSerializer" />
+			<property name="com.datastax.jpa.indexservice" value="com.datastax.hectorjpa.service.SyncInMemoryIndexingService" />
+			<!-- <property name="openjpa.EntityManagerFactory" value="me.prettyprint.hom.EntityManagerFactoryImpl"/> -->
+		</properties>
+	</persistence-unit>
+</persistence>

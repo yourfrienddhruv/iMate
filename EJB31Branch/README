@@ -1,0 +1,84 @@
+iMate ReadMe File
+
+Download 		: 90MB : http://dlc.sun.com.edgesuite.net/glassfish/4.0/promoted/glassfish-4.0-b14.zip
+Download 		: 09MB : http://www.apache.org/dyn/closer.cgi?path=/cassandra/0.8.9/apache-cassandra-0.8.9-bin.tar.gz
+Download 		: 06MB : http://code.google.com/p/cassandra-gui/downloads/detail?name=cassandra-gui-0.8.0-beta1.zip&can=2&q=
+Extract All     : Local: C:/Innovate/
+
+/** Global Setup **/
+1) JDK 6 installed on machine
+2) JAVA_HOME set to JDK6 not JRE6
+3) NO path should contain spaces
+
+/** CONFIGURE DB - One time configuration required before first time startup **/
+	EDIT : C:\Innovate\apache-cassandra-0.8.9\conf\cassandra.yaml
+		 : Change Cluster Name 
+		 		cluster_name: 'Test Cluster' to cluster_name: 'iMateCluster'
+		 			 
+/** Start DB **/
+	RUN  : C:\Innovate\apache-cassandra-0.8.9\bin\cassandra.bat
+
+/** Configure Schema in DB (IMP:semicolan at the end of command is mandatory, every command are Case Sensitive) **/
+	RUN  : C:\Innovate\apache-cassandra-0.8.9\bin\cassandra-cli.bat
+	
+	TYPE on CLI PROMPT : connect localhost/9160;
+	TYPE on CLI PROMPT : create keyspace iMateV3;
+	TYPE on CLI PROMPT : create column family Collection_Container with comparator = 'DynamicCompositeType(a=>AsciiType,b=>BytesType,i=>IntegerType,x=>LexicalUUIDType,l=>LongType,t=>TimeUUIDType,s=>UTF8Type,u=>UUIDType,A=>AsciiType(reversed=true),B=>BytesType(reversed=true),I=>IntegerType(reversed=true),X=>LexicalUUIDType(reversed=true),L=>LongType(reversed=true),T=>TimeUUIDType(reversed=true),S=>UTF8Type(reversed=true),U=>UUIDType(reversed=true))';
+	TYPE on CLI PROMPT : create column family Index_Container      with comparator = 'DynamicCompositeType(a=>AsciiType,b=>BytesType,i=>IntegerType,x=>LexicalUUIDType,l=>LongType,t=>TimeUUIDType,s=>UTF8Type,u=>UUIDType,A=>AsciiType(reversed=true),B=>BytesType(reversed=true),I=>IntegerType(reversed=true),X=>LexicalUUIDType(reversed=true),L=>LongType(reversed=true),T=>TimeUUIDType(reversed=true),S=>UTF8Type(reversed=true),U=>UUIDType(reversed=true))';
+	
+/** Check DB Setup properly **/
+	RUN : C:\Innovate\cassandra-gui-0.8.0-beta1\java -jar cassandra-gui.jar
+	Enter in UI : Host > localhost
+	Click : Connect
+	Double Click @ LHS side to expand it and show the structure we just created with CLI.
+	
+/** Start GlassFish ** /
+  Start the Server:
+ 	GO TO : cd c:/Innovate/Glassfish4/glassfish3/glassfish/bin
+  			RUN	: asadmin start-domain
+ Enable websockets support:
+ 			RUN : asadmin set configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.websockets-support-enabled=true
+ 			RUN : asadmin set configs.config.server-config.network-config.protocols.protocol.http-listener-2.http.websockets-support-enabled=true
+ Increase keep-alive timeouts: 
+ 			RUN : asadmin set configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.timeout-seconds=900
+ 			RUN : asadmin set configs.config.server-config.network-config.protocols.protocol.http-listener-2.http.timeout-seconds=900
+ Stop the Server:
+ 			RUN : asadmin stop-domain
+ Start again : 
+ 			RUN : asadmin start-domain
+ Verify :
+ 			RUN : asadmin get configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.websockets-support-enabled
+ 			RUN : asadmin get configs.config.server-config.network-config.protocols.protocol.http-listener-2.http.websockets-support-enabled
+
+/** Get Source Code **/
+ GO TO : https://github.com/yourfrienddhruv/iMate
+ 		Download ZIP
+ 		Extract to Local : C:\Innovate\eclipseWorkspace
+
+/** Setup Eclipse - One time configuration **/
+Create 2 new User Libries : GO TO Preferece->Java->BuildPath->UserLibraries 
+	New.. : libray Name : GlassfishRuntime
+						: Add all jar files	from c:\Innovate\Glassfish4\glassfish3\glassfish\modules\
+						
+	New.. : libray Name : glassfish-J2EE6-Client
+						: Add gf-client.jar from c:\Innovate\Glassfish4\glassfish3\glassfish\lib\
+
+ 		
+/** Configure projects in Eclipse- All 8 Projects are required to be configured at the same time **/
+ GO TO : File->Import 
+		Browse to : C:\Innovate\eclipseWorkspace\iMate\
+		Select : All 8 Projects to be imported.
+
+/** Deploy EAR **/
+	DO : Build All project.(there should not be any errors)
+ GO TO : Right Click on iMateEAR project go to Export->EAR 
+		Set location to : C:\Innovate\glassfish-4\glassfish3\glassfish\domains\domain1\autodeploy\iMateEAR.ear
+		Do Export. (Tick on overwrite existing file)
+
+/** TEST ( Only Firefox 8+ or Chrome or Opera 12)**/
+ GO TO : http://localhost:8080/
+ 		Enter : Name & Click on Login
+ 		Enter : yourfrienddhruv in the chatbox and click submit.
+ 		Enter : Hello in the chatbox and click submit.
+ 		Checkout : JavaScript Error Console of browser if any issues.
+ 		Checkout : C:\Innovate\glassfish-4\glassfish3\glassfish\domains\domain1\log\server.log

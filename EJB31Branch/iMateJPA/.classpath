@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GlassfishRuntime"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/gson-2.0.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/uuid-3.2.0.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/cassandra-all-0.8.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/cassandra-javautils-0.7.0.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/cassandra-thrift-0.8.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/commons-pool-1.5.3.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/FastInfoset-1.2.2.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/grizzly-http-all-2.1.7.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/guava-r08.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/hector-core-0.8.0-2-24277548729756076783ff5f1dc1b0656dba6bb1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/high-scale-lib-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/jul-to-slf4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/libthrift-0.6.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/logback-classic-0.9.29.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/logback-core-0.9.29.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/openjpa-2.1.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/ripanto-hector-jpa-a360b41.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/serp-1.13.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/iMateGroupon/WebContent/WEB-INF/lib/speed4j-0.9.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
