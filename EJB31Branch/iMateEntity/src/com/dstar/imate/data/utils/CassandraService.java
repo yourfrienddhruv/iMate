@@ -30,16 +30,31 @@ import com.dstar.imate.data.UserProfile;
 
 public class CassandraService {
 	protected static boolean cassandraStarted = false;
-	protected static String keySpaceName = "iMateV3"; 
+	protected static String keySpaceName = "iMateV3";
 	protected static Keyspace keyspace;
 	protected static Cluster cluster;
-
-	public static void startCassandraInstance(String pathToDataDir) throws TTransportException, IOException, InterruptedException,
-			SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	
+	public static void safeStartCassandra(String pathToDataDir,String host,int port) throws IOException, TTransportException, SecurityException, IllegalArgumentException, InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException{
 		if (cassandraStarted) {
+			System.out.println(" === Already started Cassandra ===");
 			return;
+		}else if ((new File(pathToDataDir).exists())){
+			System.out.println(" === Data Dir "+pathToDataDir+" already exits, Not Clean up old data.===");
+			startCassandraInstance();
+			return;
+		}else{
+			setupKeyspace(pathToDataDir,host,port);
 		}
 
+	}
+	
+	private static void cleanDataDirAndStartCassandraInstance(String pathToDataDir) throws TTransportException, IOException, InterruptedException, SecurityException,
+			IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		if (cassandraStarted) {
+			System.out.println("cleanDataDirAndStartCassandraInstance Cassandra already started DataDir "+ pathToDataDir);
+			return;
+		}
+		System.out.println("Clenaing DataDir "+ pathToDataDir);
 		try {
 			FileUtils.deleteRecursive(new File(pathToDataDir));
 		} catch (AssertionError e) {
@@ -50,6 +65,10 @@ public class CassandraService {
 
 		CassandraServiceDataCleaner cleaner = new CassandraServiceDataCleaner();
 		cleaner.prepare();
+		startCassandraInstance();
+	}
+
+	private static void startCassandraInstance() throws IOException {
 		EmbeddedCassandraService cassandra = new EmbeddedCassandraService();
 
 		cassandra.start();
@@ -80,30 +99,26 @@ public class CassandraService {
 		} catch (Throwable e) {
 			System.out.println("exception while creating keyspace, " + name + " - probably already exists : " + e.getMessage());
 		}
-		/*
-		 * for (CfDef cfDef : cfDefList) { try { cluster.addColumnFamily(new ThriftCfDef(cfDef)); } catch (Throwable e) {
-		 * System.out.println("exception while creating CF, " + cfDef.getName() + " - probably already exists : " + e.getMessage()); } }
-		 */
 	}
 
-	public static void setupKeyspace() throws TTransportException, SecurityException, IllegalArgumentException, IOException,
-			InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		startCassandraInstance("/tmp/cassandra");
+	public static void setupKeyspace(String pathToDataDir,String host,int port) throws TTransportException, SecurityException, IllegalArgumentException, IOException, InterruptedException,
+			NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		cleanDataDirAndStartCassandraInstance(pathToDataDir);
 		System.out.println("Creating TestKeyspace and columnfamilies");
 		ArrayList<CfDef> cfDefList = new ArrayList<CfDef>(2);
 
-		// === user defined entities 
-		cfDefList.add(new CfDef(keySpaceName, Coupon.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName())
-				.setKey_cache_size(0).setRow_cache_size(0).setGc_grace_seconds(86400));
-		cfDefList.add(new CfDef(keySpaceName, Group.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName())
-				.setKey_cache_size(0).setRow_cache_size(0).setGc_grace_seconds(86400));
-		cfDefList.add(new CfDef(keySpaceName, Relationship.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName())
-				.setKey_cache_size(0).setRow_cache_size(0).setGc_grace_seconds(86400));
-		cfDefList.add(new CfDef(keySpaceName, UserProfile.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName())
-				.setKey_cache_size(0).setRow_cache_size(0).setGc_grace_seconds(86400));
+		// === user defined entities
+		cfDefList.add(new CfDef(keySpaceName, Coupon.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName()).setKey_cache_size(0)
+				.setRow_cache_size(0).setGc_grace_seconds(86400));
+		cfDefList.add(new CfDef(keySpaceName, Group.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName()).setKey_cache_size(0)
+				.setRow_cache_size(0).setGc_grace_seconds(86400));
+		cfDefList.add(new CfDef(keySpaceName, Relationship.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName()).setKey_cache_size(0)
+				.setRow_cache_size(0).setGc_grace_seconds(86400));
+		cfDefList.add(new CfDef(keySpaceName, UserProfile.class.getSimpleName()).setComparator_type(BytesType.class.getSimpleName()).setKey_cache_size(0)
+				.setRow_cache_size(0).setGc_grace_seconds(86400));
 
 		// Required for Hector JPA
-		
+
 		// collection indexing
 		cfDefList.add(new CfDef(keySpaceName, AbstractCollectionField.CF_NAME)
 				.setComparator_type(DynamicCompositeType.class.getSimpleName() + DynamicComposite.DEFAULT_DYNAMIC_COMPOSITE_ALIASES)
@@ -112,14 +127,14 @@ public class CassandraService {
 
 		// search indexing
 		cfDefList.add(new CfDef(keySpaceName, IndexOperation.CF_NAME)
-				.setComparator_type(DynamicCompositeType.class.getSimpleName() + DynamicComposite.DEFAULT_DYNAMIC_COMPOSITE_ALIASES)
-				.setKey_cache_size(0).setRow_cache_size(0).setGc_grace_seconds(86400));
-
-		cluster = HFactory.getOrCreateCluster("TestPool", "localhost:9160");
+				.setComparator_type(DynamicCompositeType.class.getSimpleName() + DynamicComposite.DEFAULT_DYNAMIC_COMPOSITE_ALIASES).setKey_cache_size(0)
+				.setRow_cache_size(0).setGc_grace_seconds(86400));
+		System.out.println("============= Trying to create TestKeyspace and columnfamilies. ============= ");
+		cluster = HFactory.getOrCreateCluster("TestPool", host+":"+port);
 
 		createKeyspace(cluster, keySpaceName, "org.apache.cassandra.locator.SimpleStrategy", 1, cfDefList);
 		keyspace = HFactory.createKeyspace(keySpaceName, cluster);
 
-		System.out.println("TestKeyspace and columnfamilies creation is complete");
+		System.out.println("============= TestKeyspace and columnfamilies creation is complete ============= ");
 	}
 }

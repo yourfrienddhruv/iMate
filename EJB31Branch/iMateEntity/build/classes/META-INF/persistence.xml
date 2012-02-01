@@ -36,7 +36,9 @@
 			<property name="me.prettyprint.hom.classpathPrefix" value="com.dstar.imate.entity" />
 			<property name="me.prettyprint.hom.keyspace" value="iMateV3" />
 			<property name="me.prettyprint.hom.clusterName" value="iMateCluster" />
-			<property name="me.prettyprint.hom.hostList" value="localhost:9160" />
+			<!-- <property name="me.prettyprint.hom.hostList" value="localhost:9160" />  -->
+			<!-- for openshift -->
+			 <property name="me.prettyprint.hom.hostList" value="localhost:59076" />
 			<property name="openjpa.BrokerFactory" value="abstractstore" />
 			<property name="openjpa.abstractstore.AbstractStoreManager" value="com.datastax.hectorjpa.store.CassandraStoreManager" />
 			<property name="openjpa.MetaDataRepository" value="com.datastax.hectorjpa.store.CassandraMetaDataRepository" />

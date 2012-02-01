@@ -46,8 +46,8 @@
 			}
 		});
 		*/
-
-		iMate.groupon.ws = $.restservice("http://localhost:8080/iMateGroupon/s/Coupon", {
+		iMate.groupon.ws = $.restservice("http://imategroupon-yourfrienddhruv.rhcloud.com/iMateGroupon/s/Coupon", {
+		//iMate.groupon.ws = $.restservice("http://localhost:8080/iMateGroupon/s/Coupon", {
 			events : {
 				share : iMate.groupon.shareDone,
 				searchLatest : iMate.groupon.searchLatestDone

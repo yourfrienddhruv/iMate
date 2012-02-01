@@ -45,6 +45,7 @@ public class StandaloneWebSocketServer {
 	public static void stopServer() {
 		if (alreadyStarted) {
 			server.stop();
+			alreadyStarted=false;
 		} else {
 			System.out.println("WS Server already stopped.");
 		}
