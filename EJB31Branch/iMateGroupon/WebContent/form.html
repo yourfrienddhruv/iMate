@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>REST API Testing</title>
+</head>
+
+<body>
+	<div>
+
+		<form id="test" class="clearfix"
+			action="http://localhost:8080/iMateGroupon/s/Coupon/searchLatest"
+			method="POST">
+			<fieldset>
+				<legend>Test REST post !</legend>
+				<textarea id="details" name="details" class="xxlarge" rows="3"
+					placeholder="Details about coupon goes here e.g. Valid on purchase above 1000 only!"></textarea>
+				<div class="actions">
+					<input id="post-ajax" type="button" value="Post Ajax!"
+						class="btn primary" onclick="operationDo();">&nbsp; <input
+						id="shareIt-btn" type="submit" value="Share it!"
+						class="btn primary">&nbsp;
+					<button class="btn" type="reset">Cancel</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<!-- fallback JSON implementation  -->
+	<script type="text/javascript" src="base/utils/json2.js"></script>
+
+	<!-- JQuery Lib -->
+	<script type="text/javascript" src="base/jQuery/jquery-1.6.2.min.js"></script>
+	
+	<script type="text/javascript" src="base/iMate/core/jquery.restservice-0.0.1.D.2.js"></script>
+
+	<!-- kick start the app -->
+	<script type="text/javascript">
+	serviceEndPoint = $.restservice("http://localhost:8080/iMateGroupon/s/Coupon", {
+		events : {
+			searchLatest : operationDone
+		}
+	});
+	
+	function operationDo(){
+		serviceEndPoint.send('searchLatest',{key:'value'});
+		}
+	
+	function operationDone(msg){
+			alert('Received back : '+ JSON.stringify(msg));
+		}
+	</script>
+</body>
+</html>

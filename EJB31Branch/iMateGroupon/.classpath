@@ -8,6 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GlassfishRuntime"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jboss7Runtime"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -3,10 +3,10 @@ package com.dstar.imate.web.ws.relationship;
 import org.glassfish.grizzly.websockets.ProtocolHandler;
 import org.glassfish.grizzly.websockets.WebSocketListener;
 
+import com.dstar.imate.business.RelationshipManager;
 import com.dstar.imate.data.IData;
 import com.dstar.imate.data.StringData;
-import com.dstar.imate.entity.UserProfile;
-import com.dstar.imate.remote.facade.RelationshipManagerFacade;
+import com.dstar.imate.data.UserProfile;
 import com.dstar.imate.transport.ResponseData;
 import com.dstar.imate.web.ws.base.JsonWebSocketApplication;
 import com.dstar.imate.web.ws.base.data.JsonRequest;
@@ -42,18 +42,19 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 			return resp;
 		}
 	}
+
 	private ResponseData<UserProfile> doLogin(String username) {
 		return relationshipManager.fetchProfile(username);
 	}
 
 	// =============== startup config methods =========================//
 
-	private RelationshipManagerFacade relationshipManager;
+	private RelationshipManager relationshipManager;
 
-	public RelationshipService(RelationshipManagerFacade manager) {
+	public RelationshipService(RelationshipManager manager) {
 		super();
 		if (manager == null) {
-			throw new IllegalArgumentException("Can't inilitize Service " + this.getClass() + " due to " + RelationshipManagerFacade.class
+			throw new IllegalArgumentException("Can't inilitize Service " + this.getClass() + " due to " + RelationshipManager.class
 					+ " referece is Null");
 		} else {
 			this.relationshipManager = manager;
@@ -62,7 +63,7 @@ public class RelationshipService extends JsonWebSocketApplication<SecureServiceS
 
 	@Override
 	public JsonResponse<? extends IData> processProtocol(SecureServiceSession ws, JsonRequest req) {
-		return negative("unsupported.protocol.request",null);
+		return negative("unsupported.protocol.request", null);
 	}
 
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="open-jpa" default="enhance" basedir=".">
+	<description>Does Open JPA Enhancement of complied JPA Entities defined in persistence.xml</description>
+	<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+		<classpath id="taskdef.classpath">
+			<fileset dir="./lib/">
+				<include name="*.*" />
+			</fileset>
+			<path location="../build/classes" /> <!--Complied classes-->
+			<pathelement location="../common-lib/commons-lang-2.4.jar" />
+			<pathelement location="../common-lib/serp-1.13.1.jar" />
+			<pathelement location="../common-lib/ripanto-hector-jpa-a360b41.jar" />
+			<pathelement location="../common-lib/cassandra-all-0.8.1.jar" />
+			<pathelement location="../common-lib/cassandra-javautils-0.7.0.jar" />
+			<pathelement location="../common-lib/cassandra-thrift-0.8.1.jar" />
+			<pathelement location="../common-lib/commons-collections-3.2.1.jar" />
+			<pathelement location="../common-lib/commons-pool-1.5.3.jar" />
+			<pathelement location="../common-lib/FastInfoset-1.2.2.jar" />
+			<pathelement location="../common-lib/guava-r08.jar" />
+			<pathelement location="../common-lib/hector-core-0.8.0-2-24277548729756076783ff5f1dc1b0656dba6bb1.jar" />
+			<pathelement location="../common-lib/high-scale-lib-1.1.1.jar" />
+			<pathelement location="../common-lib/jul-to-slf4j-1.6.1.jar" />
+			<pathelement location="../common-lib/libthrift-0.6.1.jar" />
+			<pathelement location="../common-lib/logback-classic-0.9.29.jar" />
+			<pathelement location="../common-lib/logback-core-0.9.29.jar" />
+			<pathelement location="../common-lib/openjpa-2.1.1.jar" />
+			<pathelement location="../common-lib/slf4j-api-1.6.1.jar" />
+			<pathelement location="../common-lib/speed4j-0.9.jar" />
+			<pathelement location="../common-lib/uuid-3.2.0.jar" />
+		</classpath>
+	</taskdef>
+	<target name="enhance">
+		<property name="myclasspath" refid="taskdef.classpath" />
+		<echo message="Classpath = ${myclasspath}" />
+		<java classname="org.apache.openjpa.enhance.PCEnhancer" fork="true">
+			<classpath refid="taskdef.classpath" />
+			<arg value="-properties" />
+			<arg value="../build/classes/META-INF/persistence.xml" />
+		</java>
+	</target>
+</project>

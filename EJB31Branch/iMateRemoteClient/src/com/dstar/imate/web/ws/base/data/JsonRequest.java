@@ -11,17 +11,17 @@ public class JsonRequest extends AbstractJsonInteraction<StringData> {
 	public static final Type TYPE_JsonRequest_partialProcessingDataAttribute  = JsonRequest.class; 
 	
 	public <dataClass extends IData> dataClass getData(Class<dataClass> clazz){
-		if(this.getData()==null || this.getData().getData()==null || this.getData().getData().getValue()==null){
+		if(this.getData()==null || this.getData().getData()==null || this.getData().getData().getVal()==null){
 			return null;
 		}
-		return Json.from(this.getData().getData().getValue(),clazz);
+		return Json.from(this.getData().getData().getVal(),clazz);
 	}
 	
 	public <dataClass extends IData> dataClass[] getDataSet(Class<dataClass[]> arrayClazz){
 		if(this.getData()==null || this.getData().getDataSet()==null || this.getData().getDataSet().length<1 || this.getData().getDataSet()[0]==null){
 			return null;
 		}
-		return Json.from(this.getData().getDataSet()[0].getValue(),arrayClazz);
+		return Json.from(this.getData().getDataSet()[0].getVal(),arrayClazz);
 	}
 	
 	@Override
@@ -35,6 +35,6 @@ public class JsonRequest extends AbstractJsonInteraction<StringData> {
 		
 		//iF wants to directly parse whole object tree then supply this 
 		//final Type TYPE_JsonRequest_Coupon = new com.google.gson.reflect.TypeToken<JsonRequest<CouponEntity>>() {}.getType();
-		/// also have unregistor JsonRequestDefaultToStringDataDeserializer from Gson
+		/// also have unregistor to JsonRequestDefaultToStringDataDeserializer from Gson
 	}
 }

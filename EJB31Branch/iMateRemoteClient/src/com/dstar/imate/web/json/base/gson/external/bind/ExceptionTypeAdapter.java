@@ -37,7 +37,7 @@ public final class ExceptionTypeAdapter extends TypeAdapter<Throwable> {
 		writer.value(value != null ? getDeepestCause(value) : null); // Not persisting stack, as not de-serializable.
 	}
 	
-	private static final String getDeepestCause(Throwable t){
+	public static final String getDeepestCause(Throwable t){
 		if(t==null){
 			return "";
 		}else if(t.getCause()==null){

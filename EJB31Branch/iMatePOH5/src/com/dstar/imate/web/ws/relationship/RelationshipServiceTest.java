@@ -9,12 +9,11 @@ import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import com.dstar.imate.remote.RelationshipManager;
-import com.dstar.imate.remote.facade.RelationshipManagerFacade;
+import com.dstar.imate.business.RelationshipManager;
 import com.dstar.imate.web.ws.base.StandaloneWebSocketServer;
 
 public class RelationshipServiceTest extends RelationshipService {
-	public RelationshipServiceTest(RelationshipManagerFacade manager) {
+	public RelationshipServiceTest(RelationshipManager manager) {
 		super(manager);
 	}
 
@@ -27,7 +26,7 @@ public class RelationshipServiceTest extends RelationshipService {
 		StandaloneWebSocketServer.runServer(new RelationshipServiceTest(doManualInjection()));
 	}
 
-	private static RelationshipManagerFacade doManualInjection() {
+	private static RelationshipManager doManualInjection() {
 		try {
 			Properties env = new Properties();
 			// env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.impl.SerialInitContextFactory");
@@ -35,8 +34,7 @@ public class RelationshipServiceTest extends RelationshipService {
 			// env.put("org.omg.CORBA.ORBInitialHost", "115.118.181.82");
 			// env.put("org.omg.CORBA.ORBInitialPort", "3700");
 			InitialContext ctx = new InitialContext(env);
-			RelationshipManager  managerRemote = (RelationshipManager) ctx.lookup("java:global/iMateEAR/iMate/RelationshipManagerBean");
-			return RelationshipManagerFacade.getInstance(managerRemote);
+			return(RelationshipManager) ctx.lookup("java:global/iMateEAR/iMate/RelationshipManager");
 		} catch (NamingException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

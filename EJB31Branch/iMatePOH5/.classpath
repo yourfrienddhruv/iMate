@@ -10,7 +10,9 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/glassfish-J2EE6-Client"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GlassfishRuntime"/>
-	<classpathentry kind="lib" path="/iMateRemoteClient/bin"/>
-	<classpathentry kind="lib" path="/iMateClient/build/classes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/iMate"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/iMateClient"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/iMateJPA"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/iMateRemoteClient"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

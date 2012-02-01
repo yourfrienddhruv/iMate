@@ -1,0 +1,11 @@
+/* Give a quick divider Using Border and Padding*/
+#leftColumn {
+	margin-right: 0;
+	padding-right: 5px;
+}
+/* Add padding divider */
+#rightColumn {
+	margin-left: 0;
+	padding-left: 10px;
+	border-left: 1px solid #eee;
+}

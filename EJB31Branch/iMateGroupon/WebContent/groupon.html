@@ -12,18 +12,22 @@
     <![endif]-->
 
 <!-- Le styles -->
-<link type="text/css" href="scripts/jQuery/css/twitterbootstrap/jquery-ui-1.8.16.custom.css" rel="stylesheet"></link>
-<link type="text/css" href="scripts/bootstrap/bootstrap.css" rel="stylesheet"></link>
+<link type="text/css" href="base/jQuery/css/twitterbootstrap/jquery-ui-1.8.16.custom.css" rel="stylesheet"></link>
+<link type="text/css" href="base/bootstrap/bootstrap.css" rel="stylesheet"></link>
 
-<link type="text/css" href="scripts/iMate/css/application-base.css" rel="stylesheet"></link>
-<link type="text/css" href="scripts/iMate/css/groupon.css" rel="stylesheet"></link>
+<link type="text/css" href="base/iMate/css/application-base.css" rel="stylesheet"></link>
+<link type="text/css" href="script/groupon.css" rel="stylesheet"></link>
 
+<link type="text/css" href="base/jQuery/third-party/jQuery-UI-Date-Range-Picker/css/ui.daterangepicker.css" rel="stylesheet"></link>
+<!--  not used
+<link type="text/css" href="base/jQuery/third-party/wijmo/jquery.wijmo.wijmenu.css" rel="stylesheet"></link>
+ -->
 </head>
 
 <body>
 
 	<!--[if IE]>
-  <link rel="stylesheet" type="text/css" href="scripts/jQuery/css/twitterbootstrap/jquery.ui.1.8.16.ie.css"/>
+  <link rel="stylesheet" type="text/css" href="base/jQuery/css/twitterbootstrap/jquery.ui.1.8.16.ie.css"/>
   <![endif]-->
 
 	<div class="topbar">
@@ -57,10 +61,10 @@
 			</div>
 			<div class="row">
 				<!--left columns there are total 16 columns -->
-				<div class="span11">
+				<div id="leftColumn" class="span11">
 					<h2>Start Grabbing!</h2>
 					<div>
-						<table class="bordered-table zebra-striped">
+						<table id="searchResults" class="bordered-table zebra-striped">
 							<thead>
 								<tr>
 									<th>#</th>
@@ -70,7 +74,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr id="dummyRow">
 									<td>1</td>
 									<td>Some</td>
 									<td>One</td>
@@ -111,30 +115,32 @@
 									<div class="row">
 										<div class="span5">
 											<div class="input">
-												<span class="help-block">Brand Name:</span> <input type="text" size="30" name="brand" class="xlarge" placeholder="Brand Name e.g. Pizza Hut">
+												<input id="shareIt-code" type="text" size="30" name="code" class="large" placeholder="Coupon Code e.g. 46AB7F77">
 											</div>
-											<br>
+											<div class="input">
+												<input id="shareIt-validFrom" type="text" name="validFrom" class="large" placeholder="Valid From Date" />
+											</div>
 											<div class="input">
 												<div class="input-append">
-													<span class="help-block">Discount :</span> <input type="text" size="16" name="discount" class="mini" placeholder="e.g. 5%"> <label
-														class="add-on">%</label>
+													<input id="shareIt-discount" type="text" size="16" name="discount" class="large" placeholder="Discount e.g. 5%"> <label class="add-on">%</label>
 												</div>
 											</div>
-											<div class="input">
-												<input type="text" name="validFrom" id="validFrom" />
-											</div>
-											<div class="input">
-												<input type="text" name="expiring" id="expiring" />
-											</div>
-											<br>
 										</div>
 										<div class="span5">
-											<span class="help-block"> Give Details about coupon here :</span>
-											<textarea name="details" class="xlarge" rows="3" placeholder="e.g. Super cool discount coupon code, Just enter before purchase and Relax!"></textarea>
+											<div class="input">
+												<input id="shareIt-brand" type="text" size="30" name="brand" class="large" placeholder="Brand Name e.g. Pizza Hut">
+											</div>
+											<div class="input">
+												<input id="shareIt-expiring" type="text" name="expiring" class="large" placeholder="Valid Till Date" />
+											</div>
 										</div>
 									</div>
+									<div class="input">
+										<textarea id="shareIt-details" name="details" class="xxlarge" rows="3"
+											placeholder="Details about coupon goes here e.g. Valid on purchase above 1000 only!"></textarea>
+									</div>
 									<div class="actions">
-										<input id="share-it-btn" type="button" value="Share it!" class="btn primary">&nbsp;
+										<input id="shareIt-btn" type="button" value="Share it!" class="btn primary">&nbsp;
 										<button class="btn" type="reset">Cancel</button>
 									</div>
 								</fieldset>
@@ -149,7 +155,7 @@
 				<!--end column-->
 
 				<!--right column-->
-				<div class="span5">
+				<div id="rightColumn" class="span5">
 					<h2>
 						My Pocket!<small>Fill coupons in it.</small>
 					</h2>
@@ -195,43 +201,54 @@
 			</div>
 		</div>
 	</div>
+	
+	<!--#### JS template scripts #-->
+	<script id="searchCouponRows-template" type="text/x-jquery-tmpl">
+		<tr>
+			<td>${expiring}</td>
+			<td>${brand}</td>
+			<td>${discount}</td>
+			<td><button class="btn primary">Grab it!</button>
+			<button class="btn success">Return It</button></td>
+		</tr>
+	</script>
 
-	<!--scripts-->
-
-	<script type="text/javascript" src="scripts/jQuery/js/jquery-1.6.2.min.js"></script>
-	<script type="text/javascript" src="scripts/jQuery/js/jquery-ui-1.8.16.custom.min.js"></script>
-	<script type="text/javascript" src="scripts/jQuery/js/jquery.json-2.3.min.js"></script>
+	<!--#### scripts ####-->
 
 	<!-- fallback JSON implementation  -->
-	<script type="text/javascript" src="scripts/utils/js/json2.js"></script>
+	<script type="text/javascript" src="base/utils/json2.js"></script>
+
+	<!-- JQuery Lib -->
+	<script type="text/javascript" src="base/jQuery/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="base/jQuery/jquery-ui-1.8.16.custom.min.js"></script>
 
 	<!-- form utils -->
-	<script type="text/javascript" src="scripts/jQuery/third-party/form2js/form2js.js"></script>
-	<script type="text/javascript" src="scripts/jQuery/third-party/form2js/jquery.toObject.js"></script>
-	<script type="text/javascript" src="scripts/jQuery/third-party/form2js/js2form.js"></script>
+	<script type="text/javascript" src="base/jQuery/third-party/form2js/form2js.js"></script>
+	<script type="text/javascript" src="base/jQuery/third-party/form2js/jquery.toObject.js"></script>
+	<script type="text/javascript" src="base/jQuery/third-party/form2js/js2form.js"></script>
 
-	<!--date range picker-->
-	<!-- not yet used
-	<script type="text/javascript" src="scripts/jQuery/third-party/jQuery-UI-Date-Range-Picker/js/date.js"></script>
-	<script type="text/javascript" src="scripts/jQuery/third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js"></script>
- 	-->
+	<!--date range picker IMP:also needs ui.daterangepicker.css-->
+	<script type="text/javascript" src="base/jQuery/third-party/jQuery-UI-Date-Range-Picker/js/date.js"></script>
+	<script type="text/javascript" src="base/jQuery/third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js"></script>
 
-	<!--wijmo menu-->
+	<!--wijmo menu IMP: also needs jquery.wijmo.wijmenu.css-->
 	<!--  not yet used
-	<script src="scripts/jQuery/third-party/wijmo/jquery.wijmo.wijutil.js" type="text/javascript"></script>
-	<script src="scripts/jQuery/third-party/wijmo/jquery.wijmo.wijsuperpanel.js" type="text/javascript"></script>
-	<script src="scripts/jQuery/third-party/wijmo/jquery.wijmo.wijmenu.js" type="text/javascript"></script>
+	<script src="base/jQuery/third-party/wijmo/jquery.wijmo.wijutil.js" type="text/javascript"></script>
+	<script src="base/jQuery/third-party/wijmo/jquery.wijmo.wijsuperpanel.js" type="text/javascript"></script>
+	<script src="base/jQuery/third-party/wijmo/jquery.wijmo.wijmenu.js" type="text/javascript"></script>
  	-->
 
-	<!-- Application support -->
-	<script src="scripts/iMate/js/jquery.websocket-0.0.1.js" type="text/javascript"></script>
-	<script src="scripts/iMate/js/iMateWebSocketClient.js" type="text/javascript"></script>
+	<!--  Templeting -->
+	<script src="base/jQuery/third-party/templating/jquery.tmpl_jquery1.4.2pre.js" type="text/javascript"></script>
+
+	<!-- Application CORE support -->
+	<script src="base/iMate/core/jquery.websocket-0.0.1.D.2.js" type="text/javascript"></script>
+	<script src="base/iMate/core/jquery.restservice-0.0.1.D.2.js" type="text/javascript"></script>
+	
+	<!-- Application modules(If any ) -->
 
 	<!-- Application core -->
-	<script src="scripts/iMate/js/iMate.groupon.js" type="text/javascript"></script>
-
-	<!-- Application modules -->
-	<!-- If any -->
+	<script src="script/iMate.groupon.js" type="text/javascript"></script>
 
 	<!-- kick start the app -->
 	<script type="text/javascript">

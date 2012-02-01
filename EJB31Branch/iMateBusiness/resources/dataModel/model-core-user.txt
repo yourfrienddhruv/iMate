@@ -1,0 +1,68 @@
+CQL
+
+Cluster: ' cassandra.yaml
+cluster_name: 'iMate Cluster'
+partitioner: org.apache.cassandra.dht.ByteOrderedPartitioner
+data_file_directories:
+    - /var/lib/cassandra/iMateCluster/data
+
+commitlog_directory: /var/lib/iMateCluster/cassandra/commitlog
+
+saved_caches_directory: /var/lib/iMateCluster/cassandra/saved_caches
+ 
+
+KeySpace :
+ create keyspace iMateKeyspaceV1 with placement_strategy = 'org.apache.cassandra.locator.NetworkTopologyStrategy';
+
+column family:
+
+create column family userProfile with comparator = BytesType;
+
+
+Model : Core
+
+Global Objectives : Every operation MUST be idmpotant
+Global Objectives : Every model MUST satisfy each of one Operational Access,Absence,Overwrite,Remove,List Access use cases at the same point of time.
+Global Objectives : Design choice is limited to KeySpace , Column Family , Row Key , Column , Column Key , Column Value
+Global Objectives : If Secondary Indexes are use, then document at-least one alternative solution of it.
+Global Objectives : Define Source of "Key" in format KS.CF[ROWID][COLNAME]
+Global Objectives : ALL CF are accessed in Ascending KEY order
+Global Objectives : ALL COL are accessed in Ascending NAME order
+Global Objectives : ? Composite Key sources should be from same CF[ROWID]
+Global Objectives : COLUMN VAUES must be of type atomic overwrite
+Global Objectives : DynamicColumns MUST be used to achieve DUAL primary objective scenarios
+Global Objectives : Number of DynamicColumns MUST be limited to 1 Billion.
+Global Objectives : 
+  
+Model Objectives :
+ Scope  :    Access user profile 
+ Use Case A:  Authenticate
+     Input : Username <Unique>
+     Generate Key : UserName     
+  Op Access : verify username & pwd & status
+     Access pattern :  find buy username
+            Result : CF userProfile =
+        Expression : = KS.UserProfile['<username>'][pwd,status]
+     Result identification : <Unique> compare password and status.  
+            Result : boolean success = 
+        Expression : = equate C[pwd] & C[status]
+  Absence  : user profile does not exists
+  Overwrite:
+		ROWKEY : prohibited
+  		C[pwd] : updatable
+  		C[status] : updatabale
+  Remove   :
+        ROWKEY : prohibited
+  		C[pwd] : prohibited
+  		C[status] : prohibited
+  List Access: 
+		ROWKEY : allowed,ASC sorted <recommended>
+  		C[pwd] : prohibited
+  		C[status] : allowed, Equals
+
+KeySpace : Application-Core
+
+RowID : "<UserUniqueName>"
+ Column Family : "UserProfile"
+	      Column : "Password"
+	      Column : "Stauts"
